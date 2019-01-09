@@ -9,10 +9,8 @@ import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
 
-import clustering.KMeans;
 import clustering.KMeansCentroidInitialization;
 import clustering.MAPKMeans;
-import clustering.WKMeans;
 import evaluation.ExternalEvaluation;
 import readers.DoubleCSVReader;
 import readers.CSVReader;
@@ -244,7 +242,7 @@ public class ParametersTuning_SensibilityToPreferencesExperiment {
 				sdNMI = new double[101][101];
 				
 		double maxNMIAvgCurrentAlpha = 0.0,
-				bestKappaValueForCurrentAlpha = 0.0, alpha = 0.0, kappa, minFobjectiveForEachKappa,
+				bestKappaValueForCurrentAlpha = 0.0, alpha = 0.0, kappa, minobjectiveFunForEachKappa,
 				maxNMIAvgOverAllAlpha = 0.0, bestAlpha = 0.0, bestKappaOverAllAlpha = 0.0;
 	
 		double[] bestLearnedWeightsForEachKappa = new double[weights.length];
@@ -265,22 +263,22 @@ public class ParametersTuning_SensibilityToPreferencesExperiment {
 				kappa = ((double)j)/100;				
 				
 				double[] nmi = new double[nbRun];
-				double[] fobjective = new double[nbRun];
+				double[] objectiveFunction = new double[nbRun];
 				int [] tmp_partition;
-				minFobjectiveForEachKappa = Double.MAX_VALUE;
+				minobjectiveFunForEachKappa = Double.MAX_VALUE;
 				
 				/* execute MAPK-Means nbRun executions using different initial centers 
 				 * from pre-computed list (centersPacks) */
 				for(int run = 0; run < nbRun; run++){
 					algo = new MAPKMeans();
 					algo.cluster(normalizedData, centersPack.get(run), k, 100, weights, alpha, kappa);
-					fobjective[run] = algo.getIntraClusterDistance();
+					objectiveFunction[run] = algo.getObjectiveFunction();
 					
 					tmp_partition = algo.getPartition();
 					nmi[run] = ExternalEvaluation.entropyNMISun2010(tmp_partition, groundTruth);
 					
 					/* get the learned weights vector of the best solution minimizing the objective function */
-					if(fobjective[run] < minFobjectiveForEachKappa){
+					if(objectiveFunction[run] < minobjectiveFunForEachKappa){
 						bestLearnedWeightsForEachKappa = algo.getLearningVector();					
 					}
 				}
