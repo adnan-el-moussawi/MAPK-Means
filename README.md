@@ -15,7 +15,7 @@ This paper proposes a new semi-supervised clustering framework to represent and 
 }
 
 
-@INPROCEEDINGS{7814625, 
+@INPROCEEDINGS{elmoussawi:ICTAI2016, 
   author={A. El Moussawi and A. Cheriat and A. Giacometti and N. Labroche and A. Soulet}, 
   booktitle={2016 IEEE 28th International Conference on Tools with Artificial Intelligence (ICTAI)}, 
   title={Clustering with Quantitative User Preferences on Attributes}, 
